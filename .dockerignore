@@ -1,0 +1,13 @@
+.git
+.vscode
+.data
+bin
+obj
+out
+**/bin/*
+**/obj/*
+**/out/*
+data/*
+test
+secrets
+util

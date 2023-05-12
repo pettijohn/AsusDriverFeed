@@ -12,19 +12,17 @@ services:
     image: ghcr.io/pettijohn/asus-driver-feed:latest
     container_name: asus-driver-feed
     # See below for how to identify these URLs
-    environment: 
-        - DRIVER_URL = 'https://rog.asus.com/support/webapi/product/GetPDDrivers?website=global&model=GA402XY&pdid=22300&mode=&cpu=GA402XI&osid=52&active=&LevelTagId=161533&systemCode=rog'
-        - BIOS_URL = 'https://rog.asus.com/support/webapi/product/GetPDBIOS?website=global&model=GA402XY&pdid=22300&cpu=GA402XI&LevelTagId=161533&systemCode=rog'
-        - FEED_URL = 'https://full.url.where.you.host.this/feed.xml'
-    ports:
-        - 80:80/tcp
+    environment:
+      - DRIVER_URL=https://rog.asus.com/support/webapi/product/GetPDDrivers?website=global&model=GA402XY&pdid=22300&mode=&cpu=GA402XI&osid=52&active=&LevelTagId=161533&systemCode=rog
+      - BIOS_URL=https://rog.asus.com/support/webapi/product/GetPDBIOS?website=global&model=GA402XY&pdid=22300&cpu=GA402XI&LevelTagId=161533&systemCode=rog
+      - FEED_URL=https://full.url.where.you.host.this/feed.xml
     restart: always
     networks:
-      - asus-driver-feed
+      - frontend
 
 # Optional, I prefer each service on its own named network for wiring up to reverse proxy
 networks:
-  asus-driver-feed:
+  frontend:
 ```
 
 

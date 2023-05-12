@@ -58,11 +58,11 @@ async Task<IResult> GenerateFeed()
     feed.Items = items;
 
     var sb = new StringBuilder();
-    using (XmlWriter rssWriter = XmlWriter.Create(sb))
+    using (XmlWriter feedWriter = XmlWriter.Create(sb))
     {
-        Rss20FeedFormatter rssFormatter = new Rss20FeedFormatter(feed);
-        rssFormatter.WriteTo(rssWriter);
-        rssWriter.Flush();
-        return Results.Text(sb.ToString(), "application/rss+xml");
+        var feedFormatter = new Atom10FeedFormatter(feed);
+        feedFormatter.WriteTo(feedWriter);
+        feedWriter.Flush();
+        return Results.Text(sb.ToString(), "application/atom+xml");
     }
 }

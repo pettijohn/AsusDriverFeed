@@ -31,6 +31,10 @@ Here's a screenshot of the Atom feed being read in [Miniflux](https://miniflux.a
 
 ![Screenshot of Miniflux viewing the feed](docs/FeedReader.png)
 
+And detail of a single driver. Note that *External Link* is a direct download to the installer.
+
+![Details of driver](docs/driver-detail.png)
+
 ## How to identify DRIVER_URL and BIOS_URL?
 
 Go to https://rog.asus.com/support

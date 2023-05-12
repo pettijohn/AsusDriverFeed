@@ -1,5 +1,4 @@
-
-# docker buildx create --platform linux/arm64,linux/amd64 --use
-docker buildx build . --platform linux/arm64
-docker buildx build . --platform linux/amd64 
-docker buildx build . --platform linux/arm64,linux/amd64 -t ghcr.io/pettijohn/asus-driver-feed:latest --push
+# https://learn.microsoft.com/en-us/dotnet/core/docker/publish-as-container
+dotnet publish --os linux --arch arm64 /t:PublishContainer -c Release
+docker image tag asus-driver-feed:1.0.0 ghcr.io/pettijohn/asus-driver-feed:latest
+docker image push ghcr.io/pettijohn/asus-driver-feed:latest

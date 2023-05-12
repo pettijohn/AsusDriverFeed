@@ -25,7 +25,11 @@ networks:
   frontend:
 ```
 
+## In use
 
+Here's a screenshot of the Atom feed being read in [Miniflux](https://miniflux.app/), an excellent self-hosted feed reader application.
+
+![Screenshot of Miniflux viewing the feed](docs/FeedReader.png)
 
 ## How to identify DRIVER_URL and BIOS_URL?
 

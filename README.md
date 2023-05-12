@@ -9,7 +9,7 @@ version: '3.2'
 
 services:
   asus-driver-feed:
-    image: ghcr.io/pettijohn/asus-driver-feed:latest
+    image: ghcr.io/pettijohn/asus-driver-feed:latest-arm64 # or latest-amd64
     container_name: asus-driver-feed
     # See below for how to identify these URLs
     environment:

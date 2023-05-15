@@ -15,6 +15,7 @@ services:
     environment:
       - DRIVER_URL=https://rog.asus.com/support/webapi/product/GetPDDrivers?website=global&model=GA402XY&pdid=22300&mode=&cpu=GA402XI&osid=52&active=&LevelTagId=161533&systemCode=rog
       - BIOS_URL=https://rog.asus.com/support/webapi/product/GetPDBIOS?website=global&model=GA402XY&pdid=22300&cpu=GA402XI&LevelTagId=161533&systemCode=rog
+      - NVIDIA_URL=https://gfwsl.geforce.com/services_toolkit/services/com/nvidia/services/AjaxDriverService.php?func=DriverManualLookup&psid=129&pfid=1006&osID=135&languageCode=1033&beta=null&isWHQL=0&dltype=-1&dch=1&upCRD=null&qnf=0&sort1=0&numberOfResults=10
       - FEED_URL=https://full.url.where.you.host.this/feed.xml
     restart: always
     networks:
@@ -52,3 +53,7 @@ Click Response & verify the data looks like a list of drivers.
 ![Network inspector of driver details JSON](docs/json.png)
 
 Repeat on the BIOS tab, get a URL like https://rog.asus.com/support/webapi/product/GetPDBIOS?website=global&model=GA402XY&pdid=22300&cpu=GA402XI&LevelTagId=161533&systemCode=rog
+
+## NVIDIA_URL ?
+
+This one is optional. Do the same thing - start here, configure search criteria, F12/Network tab, grab the URL that shows up after you click Search. https://www.nvidia.com/en-us/geforce/drivers/ It should start with `AjaxDriverService.php`.

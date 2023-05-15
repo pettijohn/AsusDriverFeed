@@ -17,10 +17,15 @@
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
                 "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+                "pattern": "\\bNow listening on:\\s+https://\\S+:([0-9]+)",
+                "uriFormat": "https://localhost:%s/feed.xml"
             },
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "DRIVER_URL": "https://rog.asus.com/support/webapi/product/GetPDDrivers?website=global&model=GA402XY&pdid=22300&mode=&cpu=GA402XI&osid=52&active=&LevelTagId=161533&systemCode=rog",
+                "BIOS_URL": "https://rog.asus.com/support/webapi/product/GetPDBIOS?website=global&model=GA402XY&pdid=22300&cpu=GA402XI&LevelTagId=161533&systemCode=rog",
+                "NVIDIA_URL": "https://gfwsl.geforce.com/services_toolkit/services/com/nvidia/services/AjaxDriverService.php?func=DriverManualLookup&psid=129&pfid=1006&osID=135&languageCode=1033&beta=null&isWHQL=0&dltype=-1&dch=1&upCRD=null&qnf=0&sort1=0&numberOfResults=10",
+                "FEED_URL": "https://localhost/feed.xml"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"

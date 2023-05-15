@@ -1,5 +1,7 @@
 // Generated with https://json2csharp.com/
 
+namespace Asus;
+
 public class DownloadUrl
 {
     public string Global { get; set; }

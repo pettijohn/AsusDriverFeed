@@ -11,17 +11,16 @@ var app = builder.Build();
 var driverUrl = Environment.GetEnvironmentVariable("DRIVER_URL");
 var biosUrl = Environment.GetEnvironmentVariable("BIOS_URL");
 var downloadUrls = new string[] { driverUrl, biosUrl };
-var feedUrl = Environment.GetEnvironmentVariable("FEED_URL");
 var nvidiaUrl = Environment.GetEnvironmentVariable("NVIDIA_URL");
 // TODO - fetch NVIDIA 
 // https://www.nvidia.com/en-us/geforce/drivers/
 
 // Validate env variables set 
-foreach (var stringToValidate in new string[] {driverUrl, biosUrl, feedUrl})
+foreach (var stringToValidate in new string[] {driverUrl, biosUrl}) 
 {
     if(String.IsNullOrEmpty(stringToValidate))
     {
-        Console.WriteLine("FATAL - these inputs are required; set environment variables DRIVER_URL, BIOS_URL, FEED_URL");
+        Console.WriteLine("FATAL - these inputs are required; set environment variables DRIVER_URL, BIOS_URL");
         return;
     }
 }
@@ -36,8 +35,7 @@ async Task<IResult> GenerateFeed()
 {
     var http = new HttpClient();
     
-    var feed = new SyndicationFeed("ASUS Driver Feed - GA402XI", "Live updates of ASUS drivers", new Uri(feedUrl));
-    feed.ImageUrl = new Uri("https://www.asus.com/favicon.ico");
+    var feed = new SyndicationFeed("ASUS Driver Feed", "Live updates of ASUS drivers", new Uri("https://rog.asus.com/support"));
     feed.TimeToLive = TimeSpan.FromHours(12);
     feed.LastUpdatedTime = DateTimeOffset.UtcNow;
     feed.Language = "en-us";

@@ -13,8 +13,9 @@ var driverUrl = Environment.GetEnvironmentVariable("DRIVER_URL");
 var biosUrl = Environment.GetEnvironmentVariable("BIOS_URL");
 var downloadUrls = new string[] { driverUrl, biosUrl };
 var nvidiaUrl = Environment.GetEnvironmentVariable("NVIDIA_URL");
-// TODO - fetch NVIDIA 
-// https://www.nvidia.com/en-us/geforce/drivers/
+var checkAmd = false;
+Boolean.TryParse(Environment.GetEnvironmentVariable("CHECK_AMD"), out checkAmd);
+var timeout = TimeSpan.FromSeconds(20);
 
 // Validate env variables set 
 foreach (var stringToValidate in new string[] {driverUrl, biosUrl}) 
@@ -39,6 +40,7 @@ async Task<IResult> GenerateFeed()
         AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate | DecompressionMethods.Brotli
     };
     var http = new HttpClient(handler);
+    http.Timeout = timeout;
     http.DefaultRequestHeaders.Add("Accept", "*/*");
     http.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.37");
     http.DefaultRequestHeaders.Add("Connection", "keep-alive");
@@ -88,33 +90,50 @@ async Task<IResult> GenerateFeed()
     // AMD
     // https://www.amd.com/en/support
     // <a href="https://drivers.amd.com/drivers/installer/22.40/whql/amd-software-adrenalin-edition-23.5.2-minimalsetup-230531_web.exe">DOWNLOAD WINDOWS DRIVERS </a></div>
-    if(true)
+    if (checkAmd)
     {
-        var amdUrl = "https://www.amd.com/en/support";
+        // try
+        // {
+            var amdUrl = "https://www.amd.com/en/support";
+
+            // Very picky server - will just hang without headers being just so.
+            // Need a timeout handler that also emits a SyndicationItem
         
-        // Very picky server - will just hang without headers being just so.
-        // Need a timeout handler that also emits a SyndicationItem
-        var body = await http.GetStringAsync(amdUrl);
+            var task = http.GetStringAsync(amdUrl);
+            // await task.WaitAsync(timeout);
+            // if (task.IsCanceled)
+            // {
+            //     // error handling
+            //     int i = 0;
+            // }
 
-        
-        var match = Regex.Match(body, @"href=""([^""]+)"">DOWNLOAD WINDOWS DRIVERS", RegexOptions.IgnoreCase | RegexOptions.Multiline);
-        var downloadUrl = match.Groups[1].Value;
-        var version = Regex.Match(downloadUrl, @"(\d+\.\d+\.\d+)").Groups[1].Value;
+            task.Wait();
+            var body = task.Result;
 
-        
-        var headReq = new HttpRequestMessage(HttpMethod.Head, downloadUrl);
-        headReq.Headers.Add("Accept", http.DefaultRequestHeaders.Accept.ToString());
-        headReq.Headers.Add("User-Agent", "PostmanRuntime/7.32.2");
-        headReq.Headers.Add("Connection", http.DefaultRequestHeaders.Connection.ToString());
-        var headResp = await http.SendAsync(headReq);
-        var lastModified = DateTimeOffset.FromUnixTimeSeconds(Int64.Parse(headResp.Headers.ETag!.Tag.Trim('"')));
 
-        var item = new SyndicationItem(System.Net.WebUtility.UrlDecode("AMD Windows Drivers") + " - " + version, 
-                $"Version {version}", new Uri(downloadUrl), downloadUrl, 
-                lastModified);
-            
+            var match = Regex.Match(body, @"href=""([^""]+)"">DOWNLOAD WINDOWS DRIVERS", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+            var downloadUrl = match.Groups[1].Value;
+            var version = Regex.Match(downloadUrl, @"(\d+\.\d+\.\d+)").Groups[1].Value;
 
-        items.Add(item);
+
+            var headReq = new HttpRequestMessage(HttpMethod.Head, downloadUrl);
+            headReq.Headers.Add("Accept", http.DefaultRequestHeaders.Accept.ToString());
+            headReq.Headers.Add("User-Agent", "PostmanRuntime/7.32.2");
+            headReq.Headers.Add("Connection", http.DefaultRequestHeaders.Connection.ToString());
+            var headResp = await http.SendAsync(headReq);
+            var lastModified = DateTimeOffset.FromUnixTimeSeconds(Int64.Parse(headResp.Headers.ETag!.Tag.Trim('"')));
+
+            var item = new SyndicationItem(System.Net.WebUtility.UrlDecode("AMD Windows Drivers") + " - " + version,
+                    $"Version {version}", new Uri(downloadUrl), downloadUrl,
+                    lastModified);
+
+
+            items.Add(item);
+        // }
+        // catch (Exception ex)//System.TimeoutException - from Wait? System.AggregateException w/inner System.Threading.Tasks.TaskCanceledException
+        // {
+        //     ex.ToString();
+        // }
     }
 
     feed.Items = items;

@@ -124,7 +124,7 @@ async Task<IResult> GenerateFeed()
             var lastModified = DateTimeOffset.FromUnixTimeSeconds(Int64.Parse(headResp.Headers.ETag!.Tag.Trim('"')));
 
             var item = new SyndicationItem(System.Net.WebUtility.UrlDecode("AMD Windows Drivers") + " - " + version,
-                    $"Version {version}", new Uri(downloadUrl), downloadUrl,
+                    $"Version {version} - {downloadUrl}", new Uri("https://www.amd.com/en/support"), downloadUrl,
                     lastModified);
 
 
